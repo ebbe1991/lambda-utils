@@ -6,7 +6,15 @@ regex = re.compile(
 
 
 def check_required_field(field, fieldname: str):
-    if field is None or len(field) <= 0:
+    missing = False
+    if field is None:
+        missing = True
+        raise ValueNotPresentException(fieldname)
+
+    if isinstance(field, str) and len(field.strip()) <= 0:
+        missing = True
+    
+    if missing:
         raise ValueNotPresentException(fieldname)
 
 

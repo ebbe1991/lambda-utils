@@ -24,6 +24,19 @@ def test_check_required_field_empty_exception():
     assert exception_raised.error_text == "'bananas' not present."
 
 
+def test_check_required_field_just_spaces_exception():
+    bananas = ' '
+    with pytest.raises(ValueNotPresentException) as exc_info:
+        lambda_utils.validation.check_required_field(bananas, 'bananas')
+    exception_raised = exc_info.value
+    assert exception_raised.error_text == "'bananas' not present."
+
+
+def test_check_required_field_float_ok():
+    my_number = 5
+    lambda_utils.validation.check_required_field(my_number, 'my number')
+
+
 def test_check_email_ok():
     email = 'example@example.com'
     lambda_utils.validation.check_email(email)
