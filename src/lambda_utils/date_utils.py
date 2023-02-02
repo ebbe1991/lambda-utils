@@ -1,4 +1,11 @@
 from datetime import date, datetime, timedelta, timezone
+from lambda_utils.exception import ValidationException
+
+def fromisoformat(d: str):
+    try:
+        return date.fromisoformat(d)
+    except ValueError as ex:
+        raise ValidationException(ex.args[0])
 
 
 def compute_ttl_for_date(input_date: date, delta_in_days: int = 100) -> int:

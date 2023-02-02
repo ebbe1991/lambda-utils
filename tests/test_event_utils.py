@@ -1,6 +1,7 @@
 import json
 import pytest
 import lambda_utils.event_utils
+from datetime import date
 from lambda_utils.exception import ValidationException
 from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEventV2
 
@@ -17,29 +18,6 @@ def test_extract_body_none_not_ok():
         lambda_utils.event_utils.extract_body(event)
     exception_raised = exc_info.value
     assert exception_raised.error_text == "body not present."
-
-
-def test_extract_id_ok():
-    event = create_test_event(
-        path="/example/{id}", pathParameters={"id": "abc123"})
-    id = lambda_utils.event_utils.extract_id(event)
-    assert id == "abc123"
-
-
-def test_extract_id_empty_not_ok():
-    event = create_test_event(path="/example/{id}", pathParameters={"id": ""})
-    with pytest.raises(ValidationException) as exc_info:
-        lambda_utils.event_utils.extract_id(event)
-    exception_raised = exc_info.value
-    assert exception_raised.error_text == "id not present."
-
-
-def test_extract_id_none_not_ok():
-    event = create_test_event(path="/example/{id}", pathParameters={})
-    with pytest.raises(ValidationException) as exc_info:
-        lambda_utils.event_utils.extract_id(event)
-    exception_raised = exc_info.value
-    assert exception_raised.error_text == "id not present."
 
 
 def test_extract_tenant_ok():
@@ -64,7 +42,19 @@ def test_extract_tenant_none_not_ok():
     assert exception_raised.error_text == "tenant not present."
 
 
-def create_test_event(path: str = "/example", body: str = None, pathParameters: str = None, headers: str = None) -> APIGatewayProxyEventV2:
+def test_extract_stichtag_ok():
+    event = create_test_event(queryParameters={"stichtag": "2022-01-01"})
+    stichtag = lambda_utils.event_utils.extract_stichtag(event)
+    assert stichtag == date(2022, 1, 1)
+
+
+def test_extract_stichtag_none_ok():
+    event = create_test_event(queryParameters={})
+    stichtag = lambda_utils.event_utils.extract_stichtag(event)
+    assert stichtag is None
+
+
+def create_test_event(path: str = "/example", body: str = None, queryParameters: dict = None, headers: dict = None) -> APIGatewayProxyEventV2:
     return APIGatewayProxyEventV2({
         'version': '2.0',
         'routeKey': f'GET {path}',
@@ -87,7 +77,8 @@ def create_test_event(path: str = "/example", body: str = None, pathParameters: 
             'routeKey': f'GET {path}',
             'timeEpoch': 1673596800000
         },
-        'pathParameters': pathParameters,
+        "queryStringParameters": queryParameters,
+        'pathParameters': None,
         "headers": headers,
         "body": body,
         'isBase64Encoded': False

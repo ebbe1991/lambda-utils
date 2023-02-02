@@ -1,17 +1,13 @@
 import json
 from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEventV2
 from lambda_utils.exception import ValidationException
+from datetime import date
+from lambda_utils.date_utils import fromisoformat
 
 
-def extract_id(event: APIGatewayProxyEventV2) -> str:
-    path_parameters = event.path_parameters
-    id = None
-    if path_parameters:
-        id = path_parameters.get('id')
-    if id and len(id) > 0:
-        return id
-    else:
-        raise ValidationException("id not present.")
+def extract_stichtag(event: APIGatewayProxyEventV2) -> date:
+    value = event.get_query_string_value('stichtag')
+    return fromisoformat(value) if value else None
 
 
 def extract_body(event: APIGatewayProxyEventV2) -> str:
