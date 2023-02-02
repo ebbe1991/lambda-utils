@@ -1,4 +1,5 @@
 from lambda_utils.exception import ValidationException, ValueNotPresentException
+from datetime import date
 import re
 
 regex = re.compile(
@@ -13,7 +14,7 @@ def check_required_field(field, fieldname: str):
 
     if isinstance(field, str) and len(field.strip()) <= 0:
         missing = True
-    
+
     if missing:
         raise ValueNotPresentException(fieldname)
 
@@ -23,3 +24,8 @@ def check_email(email):
         pass
     else:
         raise ValidationException(f"invalid email address '{email}'.")
+
+
+def check_daterange(von: date, bis: date):
+    if von and bis and von > bis:
+        raise ValidationException(f"start '{von}' is after '{bis}'.")
