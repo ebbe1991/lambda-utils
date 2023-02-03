@@ -29,3 +29,8 @@ def check_email(email):
 def check_daterange(von: date, bis: date):
     if von and bis and von > bis:
         raise ValidationException(f"start '{von}' is after '{bis}'.")
+
+
+def check_list_not_empty(items: list, fieldname: str):
+    if items is None or len(list(filter(lambda i: i is not None, items))) < 1:
+        raise ValidationException(f"list '{fieldname}' is empty.")

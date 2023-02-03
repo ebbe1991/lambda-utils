@@ -105,15 +105,44 @@ def test_check_daterange_all_none_ok():
 
 
 def test_check_daterange_von_bis_equal_ok():
-    von = date(2022,1,1)
-    bis = date(2022,1,1)
+    von = date(2022, 1, 1)
+    bis = date(2022, 1, 1)
     lambda_utils.validation.check_daterange(von, bis)
 
 
 def test_check_daterange_von_after_bis_equal_exception():
-    von = date(2022,1,1)
-    bis = date(2021,1,1)
+    von = date(2022, 1, 1)
+    bis = date(2021, 1, 1)
     with pytest.raises(ValidationException) as exc_info:
         lambda_utils.validation.check_daterange(von, bis)
     exception_raised = exc_info.value
     assert exception_raised.error_text == "start '2022-01-01' is after '2021-01-01'."
+
+
+def test_list_not_empty_ok():
+    items = [1, 2, 3]
+    lambda_utils.validation.check_list_not_empty(items, 'liste')
+
+
+def test_list_empty_exception():
+    items = []
+    with pytest.raises(ValidationException) as exc_info:
+        lambda_utils.validation.check_list_not_empty(items, 'liste')
+    exception_raised = exc_info.value
+    assert exception_raised.error_text == "list 'liste' is empty."
+
+
+def test_list_only_none_items_exception():
+    items = [None, None]
+    with pytest.raises(ValidationException) as exc_info:
+        lambda_utils.validation.check_list_not_empty(items, 'liste')
+    exception_raised = exc_info.value
+    assert exception_raised.error_text == "list 'liste' is empty."
+
+
+def test_list_none_exception():
+    items = None
+    with pytest.raises(ValidationException) as exc_info:
+        lambda_utils.validation.check_list_not_empty(items, 'liste')
+    exception_raised = exc_info.value
+    assert exception_raised.error_text == "list 'liste' is empty."
