@@ -53,3 +53,14 @@ def response(statusCode: int, body: str = None, headers: dict = None) -> Respons
         body=body,
         headers=headers
     )
+
+
+def to_json_array(json_items: list[str]) -> str:
+    jsonarray = "["
+    json_items_length = len(json_items)
+    for i in range(json_items_length):
+        jsonarray = jsonarray + json_items[i]
+        if i < json_items_length-1:
+            jsonarray = jsonarray + ","
+
+    return jsonarray + "]"

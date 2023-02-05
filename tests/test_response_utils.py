@@ -84,3 +84,24 @@ def test_extract_id_body_none_ok():
         "body": None
     })
     assert id is None
+
+
+def test_to_json_array_ok():
+    json_array = lambda_utils.response_utils.to_json_array([
+        json.dumps({"foo": "bar"}),
+        json.dumps({"foo2": "bar2"})
+    ])
+    assert json_array == '[{"foo": "bar"},{"foo2": "bar2"}]'
+
+
+def test_to_json_array_one_element_ok():
+    json_array = lambda_utils.response_utils.to_json_array([
+        json.dumps({"foo": "bar"})
+    ])
+    assert json_array == '[{"foo": "bar"}]'
+
+
+def test_to_json_array_empty_ok():
+    json_array = lambda_utils.response_utils.to_json_array([
+    ])
+    assert json_array == '[]'
