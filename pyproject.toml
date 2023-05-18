@@ -9,7 +9,7 @@ include = ["lambda_utils"]
 [project]
 name = "lambda_utils"
 dynamic = ["readme"]
-version = "1.0.0"
+version = "1.1.0"
 authors = [{ name = "Lars Schlegelmilch" }]
 description = "utils for python based aws lambdas based on powertools"
 dependencies = ["aws_lambda_powertools", "boto3"]
