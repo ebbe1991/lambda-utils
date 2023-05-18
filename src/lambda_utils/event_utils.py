@@ -10,6 +10,14 @@ def extract_stichtag(event: APIGatewayProxyEventV2) -> date:
     return fromisoformat(value) if value else None
 
 
+def extract_count(event: APIGatewayProxyEventV2) -> date:
+    value = event.get_query_string_value('count')
+    try:
+        return int(value) if value else None
+    except ValueError as ex:
+        raise ValidationException(ex.args[0]) if value else None
+
+
 def extract_body(event: APIGatewayProxyEventV2) -> str:
     body = event.decoded_body
     json_body = None

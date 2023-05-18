@@ -54,6 +54,18 @@ def test_extract_stichtag_none_ok():
     assert stichtag is None
 
 
+def test_extract_count_ok():
+    event = create_test_event(queryParameters={"count": "5"})
+    count = lambda_utils.event_utils.extract_count(event)
+    assert count is 5
+
+
+def test_extract_count_none_ok():
+    event = create_test_event(queryParameters={})
+    count = lambda_utils.event_utils.extract_count(event)
+    assert count is None
+
+
 def create_test_event(path: str = "/example", body: str = None, queryParameters: dict = None, headers: dict = None) -> APIGatewayProxyEventV2:
     return APIGatewayProxyEventV2({
         'version': '2.0',
