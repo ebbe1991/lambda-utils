@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
@@ -9,11 +9,11 @@ include = ["lambda_utils"]
 [project]
 name = "lambda_utils"
 dynamic = ["readme"]
-version = "1.1.0"
+version = "1.2.0"
 authors = [{ name = "Lars Schlegelmilch" }]
 description = "utils for python based aws lambdas based on powertools"
 dependencies = ["aws_lambda_powertools", "boto3"]
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 
 [tool.setuptools.dynamic]
 readme = { file = ["README.md"] }
